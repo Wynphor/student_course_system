@@ -1158,7 +1158,7 @@ class ElectiveCourseApp(tk.Tk):
         if not messagebox.askyesno("退出登录", "确定退出当前账号吗？", parent=self):
             # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
             return
-        # 清空当前会话并回到登录界面，方便答辩时切换管理员和学生账号。
+        # 清空当前会话并回到登录界面，方便演示时切换管理员和学生账号。
         self.current_user = None
         # 说明：创建或配置 Tkinter 界面对象。
         self.config(menu=tk.Menu(self))
