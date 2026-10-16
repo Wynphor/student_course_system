@@ -62,10 +62,10 @@ class ElectiveSystemTestCase(unittest.TestCase):
         self.assertIsNone(admin["student_id"])
 
         # 说明：准备 student，作为当前测试步骤的输入数据或实际结果。
-        student = self.auth.login("1001", "1001")
+        student = self.auth.login("2024001", "2024001")
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(student["role"], "student")
-        self.assertEqual(student["student_id"], "1001")
+        self.assertEqual(student["student_id"], "2024001")
 
         # 说明：断言实际结果是否符合预期。
         with self.assertRaises(ServiceError):
@@ -75,30 +75,30 @@ class ElectiveSystemTestCase(unittest.TestCase):
     # 说明：定义测试用例 test_student_can_change_own_password，验证系统对应功能是否符合预期。
     def test_student_can_change_own_password(self) -> None:
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.auth.change_password("1001", "1001", "abc12345", "abc12345")
+        self.auth.change_password("2024001", "2024001", "abc12345", "abc12345")
         # 说明：准备 user，作为当前测试步骤的输入数据或实际结果。
-        user = self.auth.login("1001", "abc12345")
+        user = self.auth.login("2024001", "abc12345")
         # 说明：断言实际结果是否符合预期。
-        self.assertEqual(user["student_id"], "1001")
+        self.assertEqual(user["student_id"], "2024001")
 
         with self.assertRaises(ServiceError):
             # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-            self.auth.login("1001", "1001")
-
-        # 说明：断言实际结果是否符合预期。
-        with self.assertRaises(ServiceError):
-            # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-            self.auth.change_password("1001", "wrong-old", "newpass1", "newpass1")
+            self.auth.login("2024001", "2024001")
 
         # 说明：断言实际结果是否符合预期。
         with self.assertRaises(ServiceError):
             # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-            self.auth.change_password("1001", "abc12345", "short", "short")
+            self.auth.change_password("2024001", "wrong-old", "newpass1", "newpass1")
 
         # 说明：断言实际结果是否符合预期。
         with self.assertRaises(ServiceError):
             # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-            self.auth.change_password("1001", "abc12345", "newpass1", "newpass2")
+            self.auth.change_password("2024001", "abc12345", "short", "short")
+
+        # 说明：断言实际结果是否符合预期。
+        with self.assertRaises(ServiceError):
+            # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
+            self.auth.change_password("2024001", "abc12345", "newpass1", "newpass2")
 
     # 说明：定义测试用例 test_course_create_query_update_delete，验证系统对应功能是否符合预期。
     def test_course_create_query_update_delete(self) -> None:
@@ -163,22 +163,22 @@ class ElectiveSystemTestCase(unittest.TestCase):
     # 说明：定义测试用例 test_enrollment_prevents_duplicate_and_withdraws，验证系统对应功能是否符合预期。
     def test_enrollment_prevents_duplicate_and_withdraws(self) -> None:
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.enrollments.enroll("1001", "CS101")
+        self.enrollments.enroll("2024001", "CS101")
         # 说明：断言实际结果是否符合预期。
         with self.assertRaises(ServiceError):
             # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-            self.enrollments.enroll("1001", "CS101")
+            self.enrollments.enroll("2024001", "CS101")
 
         # 说明：读取并展示当前学生的学分统计结果。
-        summary = self.enrollments.get_credit_summary("1001")
+        summary = self.enrollments.get_credit_summary("2024001")
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(summary["selected_count"], 1)
         self.assertEqual(summary["total_credits"], 4.0)
 
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.enrollments.withdraw("1001", "CS101")
+        self.enrollments.withdraw("2024001", "CS101")
         # 说明：读取并展示当前学生的学分统计结果。
-        summary = self.enrollments.get_credit_summary("1001")
+        summary = self.enrollments.get_credit_summary("2024001")
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(summary["selected_count"], 0)
         self.assertEqual(summary["total_credits"], 0)
@@ -186,39 +186,39 @@ class ElectiveSystemTestCase(unittest.TestCase):
     # 说明：定义测试用例 test_batch_course_student_and_enrollment_operations，验证系统对应功能是否符合预期。
     def test_batch_course_student_and_enrollment_operations(self) -> None:
         # 说明：准备 count，作为当前测试步骤的输入数据或实际结果。
-        count = self.enrollments.enroll_many("1001", ["CS101", "CS102"])
+        count = self.enrollments.enroll_many("2024001", ["CS101", "CS102"])
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(count, 2)
         # 说明：读取并展示当前学生的学分统计结果。
-        summary = self.enrollments.get_credit_summary("1001")
+        summary = self.enrollments.get_credit_summary("2024001")
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(summary["selected_count"], 2)
         self.assertEqual(summary["total_credits"], 8.0)
 
         # 说明：准备 count，作为当前测试步骤的输入数据或实际结果。
-        count = self.enrollments.withdraw_many("1001", ["CS101", "CS102"])
+        count = self.enrollments.withdraw_many("2024001", ["CS101", "CS102"])
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(count, 2)
         # 说明：读取并展示当前学生的学分统计结果。
-        self.assertEqual(self.enrollments.get_credit_summary("1001")["selected_count"], 0)
+        self.assertEqual(self.enrollments.get_credit_summary("2024001")["selected_count"], 0)
 
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.enrollments.enroll("1002", "AI101")
+        self.enrollments.enroll("2024002", "AI101")
         # 说明：准备 deleted_courses，作为当前测试步骤的输入数据或实际结果。
         deleted_courses = self.courses.delete_courses(["AI101", "PE101"])
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(deleted_courses, 2)
         self.assertIsNone(self.courses.get_course("AI101"))
         # 说明：读取并展示当前学生的学分统计结果。
-        self.assertEqual(self.enrollments.get_credit_summary("1002")["selected_count"], 0)
+        self.assertEqual(self.enrollments.get_credit_summary("2024002")["selected_count"], 0)
 
         # 说明：准备 deleted_students，作为当前测试步骤的输入数据或实际结果。
-        deleted_students = self.students.delete_students(["1002", "1003"])
+        deleted_students = self.students.delete_students(["2024002", "2024003"])
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(deleted_students, 2)
-        self.assertIsNone(self.auth.get_user("1002"))
+        self.assertIsNone(self.auth.get_user("2024002"))
         # 说明：断言实际结果是否符合预期。
-        self.assertIsNone(self.auth.get_user("1003"))
+        self.assertIsNone(self.auth.get_user("2024003"))
 
     # 说明：定义测试用例 test_new_student_account_delete_cascade_and_password_reset，验证系统对应功能是否符合预期。
     def test_new_student_account_delete_cascade_and_password_reset(self) -> None:
@@ -226,39 +226,39 @@ class ElectiveSystemTestCase(unittest.TestCase):
         self.students.create_student(
             {
                 # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-                "student_id": "1999",
+                "student_id": "2024999",
                 "name": "测试学生",
                 # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-                "class_name": "测试班级",
+                "class_name": "计科2499",
                 "major": "计算机科学与技术",
                 # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-                "phone": "10010009999",
+                "phone": "13900009999",
             }
         )
         # 说明：准备 user，作为当前测试步骤的输入数据或实际结果。
-        user = self.auth.login("1999", "1999")
+        user = self.auth.login("2024999", "2024999")
         # 说明：断言实际结果是否符合预期。
-        self.assertEqual(user["student_id"], "1999")
+        self.assertEqual(user["student_id"], "2024999")
 
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.auth.reset_student_password("1999")
+        self.auth.reset_student_password("2024999")
         # 说明：断言实际结果是否符合预期。
-        self.assertEqual(self.auth.login("1999", "1999")["role"], "student")
+        self.assertEqual(self.auth.login("2024999", "2024999")["role"], "student")
 
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.students.delete_student("1999")
+        self.students.delete_student("2024999")
         # 说明：断言实际结果是否符合预期。
-        self.assertIsNone(self.auth.get_user("1999"))
+        self.assertIsNone(self.auth.get_user("2024999"))
 
     # 说明：定义测试用例 test_student_user_enrollment_is_limited_to_self，验证系统对应功能是否符合预期。
     def test_student_user_enrollment_is_limited_to_self(self) -> None:
         # 说明：准备 user，作为当前测试步骤的输入数据或实际结果。
-        user = self.auth.login("1001", "1001")
+        user = self.auth.login("2024001", "2024001")
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
         self.enrollments.enroll_for_user(user, "CS101")
         # 说明：读取并展示当前学生的学分统计结果。
-        own_summary = self.enrollments.get_credit_summary("1001")
-        other_summary = self.enrollments.get_credit_summary("1002")
+        own_summary = self.enrollments.get_credit_summary("2024001")
+        other_summary = self.enrollments.get_credit_summary("2024002")
         # 说明：断言实际结果是否符合预期。
         self.assertEqual(own_summary["selected_count"], 1)
         self.assertEqual(other_summary["selected_count"], 0)
@@ -271,15 +271,15 @@ class ElectiveSystemTestCase(unittest.TestCase):
     # 说明：定义测试用例 test_setting_changes_credit_qualification，验证系统对应功能是否符合预期。
     def test_setting_changes_credit_qualification(self) -> None:
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.enrollments.enroll("1002", "CS101")
+        self.enrollments.enroll("2024002", "CS101")
         self.settings.set_min_required_credits("3")
         # 说明：读取并展示当前学生的学分统计结果。
-        self.assertTrue(self.enrollments.get_credit_summary("1002")["is_qualified"])
+        self.assertTrue(self.enrollments.get_credit_summary("2024002")["is_qualified"])
 
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
         self.settings.set_min_required_credits("5")
         # 说明：读取并展示当前学生的学分统计结果。
-        summary = self.enrollments.get_credit_summary("1002")
+        summary = self.enrollments.get_credit_summary("2024002")
         # 说明：断言实际结果是否符合预期。
         self.assertFalse(summary["is_qualified"])
         # 说明：计算距离最低毕业学分要求还差多少。
@@ -292,7 +292,7 @@ class ElectiveSystemTestCase(unittest.TestCase):
         # 说明：准备 enrollment_path，作为当前测试步骤的输入数据或实际结果。
         enrollment_path = self.tmp_path / "enrollments.csv"
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
-        self.enrollments.enroll("1003", "CS202")
+        self.enrollments.enroll("2024003", "CS202")
         self.courses.export_courses_csv(course_path)
         # 说明：执行当前逻辑语句，完成所在函数中的一个处理步骤。
         self.enrollments.export_enrollments_csv(enrollment_path)
