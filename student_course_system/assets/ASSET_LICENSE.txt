@@ -1,0 +1,33 @@
+Nyan Cat classic asset notice
+
+Files:
+- nyan_cat_source.gif
+- nyan_cat_login.gif
+- nyan_cat_sidebar.gif
+
+Source URL:
+https://www.nyan.cat/cats/original.gif
+
+Attribution:
+The classic Nyan Cat image is associated with Christopher Torres / prguitarman.
+
+Use in this project:
+These files are included only as decorative UI assets for a local Python course
+design demonstration. The project does not claim ownership of the classic Nyan
+Cat image and is not intended for commercial publication or redistribution as a
+standalone asset package.
+
+Fallback:
+If the classic GIF files are removed, the application can generate simplified
+local placeholder pixel-cat PNG files so the offline program still runs.
+
+Current catgirl kanban source:
+- Source URL: https://www.pngkey.com/png/full/302-3027347_cute-chibi-cat-girl.png
+- Stored as assets/kanban_catgirl_candidate.png
+- Use: decorative sidebar character for local Python course design demonstration.
+- Note: this image is kept for local course design display. If strict open-license
+  requirements are enforced, replace it with a CC0/OpenGameArt asset.
+
+Kanban fallback:
+- File: kanban_musume_fallback.png
+- Source: generated locally by pixel_assets.py only as a missing-file fallback.
